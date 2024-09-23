@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	eigenpodproofs "github.com/Layr-Labs/eigenpod-proofs-generation"
 	"github.com/Layr-Labs/eigenpod-proofs-generation/cli/core/multicall"
@@ -143,7 +144,7 @@ func StartCheckpoint(ctx context.Context, eigenpodAddress string, ownerPrivateKe
 }
 
 func GetBeaconClient(beaconUri string, verbose bool) (BeaconClient, error) {
-	beaconClient, _, err := NewBeaconClient(beaconUri, verbose)
+	beaconClient, _, err := NewBeaconClient(beaconUri, verbose, 300*time.Second)
 	return beaconClient, err
 }
 

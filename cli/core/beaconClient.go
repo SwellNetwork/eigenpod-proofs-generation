@@ -33,7 +33,7 @@ type beaconClient struct {
 	verbose    bool
 }
 
-func NewBeaconClient(endpoint string, verbose bool) (BeaconClient, context.CancelFunc, error) {
+func NewBeaconClient(endpoint string, verbose bool, timeout time.Duration) (BeaconClient, context.CancelFunc, error) {
 	beaconClient := beaconClient{verbose: verbose}
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -41,7 +41,7 @@ func NewBeaconClient(endpoint string, verbose bool) (BeaconClient, context.Cance
 		// WithAddress supplies the address of the beacon node, as a URL.
 		http.WithAddress(endpoint),
 		http.WithLogLevel(zerolog.WarnLevel),
-		http.WithTimeout(300*time.Second),
+		http.WithTimeout(timeout),
 	)
 	if err != nil {
 		return nil, cancel, err
