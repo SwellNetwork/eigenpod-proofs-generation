@@ -29,12 +29,13 @@ type BeaconClient interface {
 }
 
 type beaconClient struct {
+	timeout    time.Duration
 	eth2client eth2client.Service
 	verbose    bool
 }
 
 func NewBeaconClient(endpoint string, verbose bool, timeout time.Duration) (BeaconClient, context.CancelFunc, error) {
-	beaconClient := beaconClient{verbose: verbose}
+	beaconClient := beaconClient{verbose: verbose, timeout: timeout}
 	ctx, cancel := context.WithCancel(context.Background())
 
 	client, err := http.New(ctx,
@@ -106,13 +107,12 @@ func (b *beaconClient) GetValidator(ctx context.Context, index uint64) (*v1.Vali
 }
 
 func (b *beaconClient) GetBeaconState(ctx context.Context, stateId string) (*spec.VersionedBeaconState, error) {
-	timeout, _ := time.ParseDuration("200s")
 	if provider, ok := b.eth2client.(eth2client.BeaconStateProvider); ok {
 		if b.verbose {
 			log.Info().Msgf("downloading beacon state %s", stateId)
 		}
 		opts := &api.BeaconStateOpts{State: stateId, Common: api.CommonOpts{
-			Timeout: timeout,
+			Timeout: b.timeout,
 		}}
 		beaconState, err := provider.BeaconState(ctx, opts)
 		if err != nil {
