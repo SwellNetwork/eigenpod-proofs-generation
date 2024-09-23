@@ -6,7 +6,7 @@ toolchain go1.21.7
 
 require (
 	github.com/attestantio/go-eth2-client v0.19.9
-	github.com/ethereum/go-ethereum v1.13.14
+	github.com/ethereum/go-ethereum v1.13.15
 	github.com/fatih/color v1.16.0
 	github.com/ferranbt/fastssz v0.1.3
 	github.com/hashicorp/golang-lru/v2 v2.0.7
